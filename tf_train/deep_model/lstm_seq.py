@@ -28,6 +28,7 @@ class LSTMModel(BaseModel):
 
     def batch_train(self, session, batch_size, begin):
         batch_x, batch_y = get_batch_data_memory(self.train_x, self.train_y, batch_size, begin)
+        batch_x = batch_x.reshape((batch_size, self.config['feature_num'], self.config['seq_num']))
         _, self.batch_cost, self.batch_accuracy = session.run([self.optimizer, self.cost, self.accuracy],
                                                               feed_dict={self.input: batch_x, self.label: batch_y})
 
