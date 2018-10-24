@@ -1,0 +1,16 @@
+{
+  "training_epochs": 50,
+  "learning_rate": 0.0001,
+  "display_step": 10,
+  "batch_size": 512,
+  "embedding_num": 48,
+  "drop_out": 0.5,
+  "full_output_num": 4,
+  "feature_num": 97,
+  "class_num": 5,
+  "training": "/Users/jd.com/Documents/train_car",
+  "test": "/Users/jd.com/Documents/test_car",
+  "output_folder": "/Users/jd.com/Documents/car_test"
+}
+
+
