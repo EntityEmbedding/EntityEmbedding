@@ -1,9 +1,8 @@
 import tensorflow as tf
 
-
 from common.io_util import read_svm_data, one_hot_encode, get_batch_data_memory
 from tf_train.deep_model.base_nn import BaseModel
-from tf_train.deep_model.common_nn import build_conv_layer, build_layer
+from tf_train.deep_model.common_nn import build_conv_layer, build_layer, build_pooling_layer
 
 
 class ConvolutionModel(BaseModel):
@@ -42,29 +41,32 @@ class ConvolutionModel(BaseModel):
     def build_net(self):
         # Reshape input
         # original shape 2D tensor 1 * feature_dim
-        # reshape into 4D tensor
-        with tf.name_scope('Conv_1'):
-            conv1 = build_conv_layer(self.input, self.config['filter_size1'], self.config['embed_size1'], self.config[
-                'conv_1'], 'Conv_1', strides=1, seed=1234567)
-        # Max Pooling (down-sampling) Layer 1
-        with tf.name_scope('Pooling_Layer_1'):
-            conv1 = self.maxpool2d(conv1, k=self.config['pooling_size1'])
-
-        with tf.name_scope('Conv_2'):
-            conv2 = build_conv_layer(conv1, self.config['filter_size2'], self.config['embed_size2'], self.config[
-                'conv_2', 'Conv_2'], strides=1, seed=1234567)
-        # Max Pooling (down-sampling) Layer 2
-        with tf.name_scope('Pooling_Layer_2'):
-            conv2 = self.maxpool2d(conv2, k=self.config['pooling_size2'])
+        # reshape into 3D tensor
+        # shape = [batch_size, 1, in_width (feature_dim), in_channel (pointwise 1, pairwise 2)]
+        self.input = tf.reshape(self.input, shape=[-1, self.config['feature_num'], 1])
+        assert (len(self.config['conv_size']) == len(self.config['filter_size']))
+        assert (len(self.config['conv_size']) == len(self.config['pooling_size']))
+        conv = self.input
+        for layer_num in range(len(self.config['conv_size'])):
+            name_scope = 'Conv_Layer_' + str(layer_num)
+            with tf.name_scope(name_scope):
+                conv = build_conv_layer(conv, self.config['filter_size'][layer_num], 1, self.config[
+                    'conv_size'][layer_num], 'Conv_' + str(layer_num), stride=self.config['stride_size'], seed=1234567)
+            name_scope = 'Pooling_Layer' + str(layer_num)
+            with tf.name_scope(name_scope):
+                conv = build_pooling_layer(conv, k=self.config['pooling_size'][layer_num])
 
         # Fully Connected Layer
         # Reshape conv2 output to fit fully connected layer input
         # Fully Connected Layer Input Number
-        with tf.name_scope('Full_Layer'):
-            fc = build_layer(conv2, self.config['full_output_num'], "full", 1234567)
-            fc = tf.nn.relu(fc)
-            # Apply Dropout
-            fc = tf.nn.dropout(fc, self.config['drop_out'])
+        fc = conv
+        for layer_num in range(len(self.config['full_output_num'])):
+            name_scope = "Full_Layer_" + layer_num
+            with tf.name_scope(name_scope):
+                fc = build_layer(fc, self.config['full_output_num'][layer_num], "full", 1234567)
+                fc = tf.nn.relu(fc)
+                # Apply Dropout
+                fc = tf.nn.dropout(fc, self.config['drop_out'])
 
         # Output Layer
         with tf.name_scope('Output_Layer'):

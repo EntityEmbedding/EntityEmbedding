@@ -39,7 +39,7 @@ if __name__ == "__main__":
             CNN = ConvolutionModel(_config)
             CNN.train_net(None, is_incremental)
             _feed_dict = {CNN.input: CNN.test_x}
-            y_pred = CNN.predict(CNN.predictor, _feed_dict, None, is_eval=False)
+            y_pred, _, _ = CNN.predict(CNN.predictor, _feed_dict, None, is_eval=False)
             predict_label = np.argmax(y_pred, axis=1)
             test_label = np.argmax(CNN.test_y, axis=1)
             print('Model Performance of CNN\n')
@@ -51,7 +51,7 @@ if __name__ == "__main__":
             LSTM = LSTMModel(_config)
             LSTM.train_net(None, is_incremental)
             _feed_dict = {LSTM.input: LSTM.test_x}
-            y_pred = LSTM.predict(LSTM.predictor, _feed_dict, None, is_eval=False)
+            y_pred, _, _ = LSTM.predict(LSTM.predictor, _feed_dict, None, is_eval=False)
             predict_label = np.argmax(y_pred, axis=1)
             test_label = np.argmax(LSTM.test_y, axis=1)
             print('Model Performance of DNN\n')

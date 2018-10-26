@@ -1,5 +1,5 @@
 {
-  "training_epochs": 50,
+  "training_epochs": 10,
   "learning_rate": 0.0001,
   "display_step": 10,
   "batch_size": 512,
@@ -14,5 +14,3 @@
   "test": "/Users/jd.com/Documents/test_car",
   "output_folder": "/Users/jd.com/Documents/car_test"
 }
-
-

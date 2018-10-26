@@ -3,18 +3,16 @@
   "learning_rate": 0.00008,
   "display_step": 10,
   "batch_size": 512,
-  "embedding_num": 80,
-  "filter_size1": 2,
-  "filter_size2": 2,
-  "embed_size1": 10,
-  "embed_size2": 10,
-  "pooling_size1": 2,
-  "pooing_size2": 2,
-  "feature_num": 80,
+  "filter_size": [2, 2],
+  "conv_size": [16, 16],
+  "stride_size": 2,
+  "pooling_size": [2, 2],
+  "feature_num": 97,
   "class_num": 5,
-  "full_output_num": [
-    4
-  ]
+  "full_output_num": [4],
+  "training": "/Users/jd.com/Documents/train_car",
+  "test": "/Users/jd.com/Documents/test_car",
+  "output_folder": "/Users/jd.com/Documents/car_test"
 }
 
 

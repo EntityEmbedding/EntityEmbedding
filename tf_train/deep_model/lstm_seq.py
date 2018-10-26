@@ -24,7 +24,9 @@ class LSTMModel(BaseModel):
         self.test_x, self.test_y = read_training_sequence(self.config['training'],
                                                           self.config['feature_num'],
                                                           self.sequence_num)
+        self.test_x = self.test_x.reshape((-1, self.config['feature_num'], self.config['seq_num']))
         self.train_y = one_hot_encode(self.train_y)
+        self.test_y = one_hot_encode(self.test_y)
 
     def batch_train(self, session, batch_size, begin):
         batch_x, batch_y = get_batch_data_memory(self.train_x, self.train_y, batch_size, begin)
