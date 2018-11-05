@@ -14,7 +14,7 @@ class ConvolutionModel(BaseModel):
             'learning_rate']).minimize(self.cost)
 
     def _eval_cost(self):
-        diff = tf.nn.softmax_cross_entropy_with_logits(
+        diff = tf.nn.softmax_cross_entropy_with_logits_v2(
             logits=self.predictor, labels=self.label)
         self.cost = tf.reduce_mean(diff)
         correct_pred = tf.equal(
@@ -25,12 +25,14 @@ class ConvolutionModel(BaseModel):
         with tf.name_scope('inputs'):
             self.input = tf.placeholder(
                 tf.float32, [None, self.config['feature_num']], 'data')
-            # self.input = tf.reshape(self.input, shape=[-1, self.config['feature_num'], self.config['embedd'], 1])
+            # shape = [batch_size, 1, in_width (feature_dim), in_channel (pointwise 1, pairwise 2)]
+            self.input = tf.reshape(self.input, shape=[None, 1, self.config['feature_num'], 1])
             self.label = tf.placeholder(tf.float32, [None, self.config['class_num']], 'label')
 
     def batch_train(self, session, batch_size, begin):
         batch_x, batch_y = get_batch_data_memory(self.train_x, self.train_y, batch_size, begin)
-        _, self.batch_cost, self.batch_accuracy = session.run([self.optimizer, self.cost, self.diff],
+        # batch_x = batch_x.reshape((batch_size, ))
+        _, self.batch_cost, self.batch_accuracy = session.run([self.optimizer, self.cost, self.accuracy],
                                                               feed_dict={self.input: batch_x, self.label: batch_y})
 
     def _data_processor(self):
@@ -43,15 +45,16 @@ class ConvolutionModel(BaseModel):
         # original shape 2D tensor 1 * feature_dim
         # reshape into 3D tensor
         # shape = [batch_size, 1, in_width (feature_dim), in_channel (pointwise 1, pairwise 2)]
-        self.input = tf.reshape(self.input, shape=[-1, self.config['feature_num'], 1])
         assert (len(self.config['conv_size']) == len(self.config['filter_size']))
         assert (len(self.config['conv_size']) == len(self.config['pooling_size']))
         conv = self.input
+        in_channel = 1
         for layer_num in range(len(self.config['conv_size'])):
             name_scope = 'Conv_Layer_' + str(layer_num)
             with tf.name_scope(name_scope):
-                conv = build_conv_layer(conv, self.config['filter_size'][layer_num], 1, self.config[
+                conv = build_conv_layer(conv, 1, self.config['filter_size'][layer_num], in_channel, self.config[
                     'conv_size'][layer_num], 'Conv_' + str(layer_num), stride=self.config['stride_size'], seed=1234567)
+                in_channel = self.config['conv_size'][layer_num]
             name_scope = 'Pooling_Layer' + str(layer_num)
             with tf.name_scope(name_scope):
                 conv = build_pooling_layer(conv, k=self.config['pooling_size'][layer_num])
@@ -59,9 +62,9 @@ class ConvolutionModel(BaseModel):
         # Fully Connected Layer
         # Reshape conv2 output to fit fully connected layer input
         # Fully Connected Layer Input Number
-        fc = conv
+        fc = tf.reshape(conv, shape=[-1, self.config['full_in']])
         for layer_num in range(len(self.config['full_output_num'])):
-            name_scope = "Full_Layer_" + layer_num
+            name_scope = "Full_Layer_" + str(layer_num)
             with tf.name_scope(name_scope):
                 fc = build_layer(fc, self.config['full_output_num'][layer_num], "full", 1234567)
                 fc = tf.nn.relu(fc)

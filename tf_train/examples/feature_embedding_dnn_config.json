@@ -8,9 +8,9 @@
   "full_output_num": 4,
   "feature_num": 97,
   "class_num": 5,
-  "training": "/Users/jd.com/Documents/train_car",
-  "test": "/Users/jd.com/Documents/test_car",
-  "output_folder": "/Users/jd.com/Documents/car_test"
+  "training": "train",
+  "test": "test",
+  "output_folder": "model"
 }
 
 

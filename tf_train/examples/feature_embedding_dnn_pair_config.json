@@ -15,8 +15,8 @@
   ],
   "feature_num": 97,
   "class_num": 5,
-  "training": "/Users/jd.com/Documents/train_car_pairwise",
-  "test": "/Users/jd.com/Documents/test_car_pairwise",
-  "output_folder": "/Users/jd.com/Documents/car_test"
+  "training": "train_pairwise",
+  "test": "test_pairwise",
+  "output_folder": "model_pairwise"
 }
 

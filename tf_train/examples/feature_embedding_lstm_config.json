@@ -10,7 +10,7 @@
   "feature_num": 97,
   "class_num": 5,
   "hidden_num": 36,
-  "training": "/Users/jd.com/Documents/train_car",
-  "test": "/Users/jd.com/Documents/test_car",
-  "output_folder": "/Users/jd.com/Documents/car_test"
+  "training": "train",
+  "test": "test",
+  "output_folder": "model"
 }
