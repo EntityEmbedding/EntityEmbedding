@@ -12,8 +12,8 @@
   "full_in": 16,
   "full_output_num": [4],
   "drop_out": 0.5,
-  "training": "train",
-  "test": "test",
+  "training": "../toy_data/expedia_pairwise_fea",
+  "test": "../toy_data/expedia_pairwise_fea",
   "output_folder": "model"
 }
 
