@@ -7,7 +7,7 @@
   "drop_out": 0.5,
   "full_output_num": 4,
   "feature_num": 48,
-  "class_num": 3,
+  "class_num": 6,
   "training": "../toy_data/expedia_pairwise_fea",
   "test": "../toy_data/expedia_pairwise_fea",
   "output_folder": "model"
