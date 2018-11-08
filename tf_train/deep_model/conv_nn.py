@@ -38,7 +38,7 @@ class ConvolutionModel(BaseModel):
     def _data_processor(self):
         self.train_x, self.train_y = read_svm_data(self.config['training'], self.config['feature_num'])
         self.test_x, self.test_y = read_svm_data(self.config['test'], self.config['feature_num'])
-        self.train_y = one_hot_encode(self.train_y)
+        self.train_y = one_hot_encode(self.train_y, self.config['class_num'])
 
     def build_net(self):
         # Reshape input

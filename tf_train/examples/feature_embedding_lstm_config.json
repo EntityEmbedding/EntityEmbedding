@@ -7,10 +7,10 @@
   "full_output_num": 4,
   "seq_num": 20,
   "forget": 0.5,
-  "feature_num": 97,
-  "class_num": 5,
+  "feature_num": 48,
+  "class_num": 6,
   "hidden_num": 36,
-  "training": "train",
-  "test": "test",
+  "training": "../toy_data/expedia_pairwise_fea",
+  "test": "../toy_data/expedia_pairwise_fea",
   "output_folder": "model"
 }

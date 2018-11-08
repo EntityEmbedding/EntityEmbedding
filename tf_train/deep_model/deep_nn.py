@@ -28,8 +28,8 @@ class DeepModel(BaseModel):
     def _data_processor(self):
         self.train_x, self.train_y = read_svm_data(self.config['training'], self.config['feature_num'])
         self.test_x, self.test_y = read_svm_data(self.config['test'], self.config['feature_num'])
-        self.train_y = one_hot_encode(self.train_y)
-        self.test_y = one_hot_encode(self.test_y)
+        self.train_y = one_hot_encode(self.train_y, self.config['class_num'])
+        self.test_y = one_hot_encode(self.test_y, self.config['class_num'])
 
     def batch_train(self, session, batch_size, begin):
         batch_x, batch_y = get_batch_data_memory(self.train_x, self.train_y, batch_size, begin)

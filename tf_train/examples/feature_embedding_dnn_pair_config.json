@@ -13,10 +13,10 @@
     8,
     4
   ],
-  "feature_num": 97,
-  "class_num": 5,
-  "training": "train_pairwise",
-  "test": "test_pairwise",
+  "feature_num": 48,
+  "class_num": 6,
+  "training": "../toy_data/expedia_pairwise",
+  "test": "../toy_data/expedia_pairwise",
   "output_folder": "model_pairwise"
 }
 
